@@ -5,13 +5,13 @@ const tokens = (n) => {
 }
 
 describe("Dappcord", function () {
-  let dappcord
+  let dappcord, deployer, user
 
   const NAME = "Dappcord"
   const SYMBOL = "DCORD"
 
   this.beforeEach(async () => {
-    // [owner, user1, user2] = await ethers.getSigners()
+    [deployer, user] = await ethers.getSigners()
     const Dappcord = await ethers.getContractFactory("Dappcord")
     dappcord = await Dappcord.deploy(NAME, SYMBOL)
     await dappcord.deployed()
@@ -26,6 +26,11 @@ describe("Dappcord", function () {
     it("sets the symbol correctly", async function () {
       const result = await dappcord.symbol()
       expect(result).to.equal(SYMBOL)
+    })
+
+    it("sets the owner correctly", async function () {
+      const result = await dappcord.owner()
+      expect(result).to.equal(deployer.address)
     })
   })
 })
