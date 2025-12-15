@@ -12,9 +12,15 @@ describe("Dappcord", function () {
 
   this.beforeEach(async () => {
     [deployer, user] = await ethers.getSigners()
+
+    // Deploy the Dappcord contract
     const Dappcord = await ethers.getContractFactory("Dappcord")
     dappcord = await Dappcord.deploy(NAME, SYMBOL)
     await dappcord.deployed()
+
+    // Create a channel
+    const transaction = await dappcord.connect(deployer).createChannel("General", tokens(1))
+    await transaction.wait()
   })
 
   describe("Deployment", function () {
@@ -31,6 +37,20 @@ describe("Dappcord", function () {
     it("sets the owner correctly", async function () {
       const result = await dappcord.owner()
       expect(result).to.equal(deployer.address)
+    })
+  })
+
+  describe("Creating Channels", function () {
+    it('Returns total channels', async () => {
+      const result = await dappcord.totalChannels()
+      expect(result).to.equal(1)
+    })
+
+    it('Returns channel attributes', async () => {
+      const channel = await dappcord.getChannel(1)
+      expect(channel.id).to.equal(1)
+      expect(channel.name).to.equal("General")
+      expect(channel.cost).to.equal(tokens(1))
     })
   })
 })
