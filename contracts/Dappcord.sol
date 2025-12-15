@@ -15,11 +15,16 @@ contract Dappcord is ERC721 {
 
     mapping(uint256 => Channel) public channels; // mapping of channel id to channel details
 
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can call this function");
+        _;
+    }
+
     constructor(string memory _name, string memory _symbol) ERC721(_name, _symbol) {
         owner = msg.sender;
     }
 
-    function createChannel(string memory _name, uint256 _cost) public {
+    function createChannel(string memory _name, uint256 _cost) public onlyOwner {
         // _cost is the cost of joining a channel
         totalChannels++;
         channels[totalChannels] = Channel(totalChannels, _name, _cost);
