@@ -15,13 +15,29 @@ import Dappcord from './abis/Dappcord.json'
 import config from './config.json';
 
 // Socket
-const socket = io('ws://localhost:3030');
+// const socket = io('ws://localhost:3030');
 
 function App() {
 
+  const [account, setAccount] = useState(null);
+
+  const loadBlockchainData = async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      window.ethereum.on('accountsChanged', async () => {
+        window.location.reload();
+      });
+    } else {
+      console.log("Please install Metamask");
+    }
+  }
+
+  useEffect(() => {
+    loadBlockchainData();
+  }, []);
+
   return (
     <div>
-      <h1 style={{ textAlign: "center", padding: "15px" }}>Welcome to Dappcord</h1>
+      <Navigation account={account} setAccount={setAccount} />
 
       <main>
 
