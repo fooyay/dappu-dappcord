@@ -20,6 +20,7 @@ const Channels = ({ provider, account, dappcord, channels, currentChannel, setCu
             <li
               key={index}
               onClick={() => channelHandler(channel)}
+              className={currentChannel && currentChannel.id === channel.id ? 'active' : ''}
             >{channel.name}</li>
           ))}
         </ul>
