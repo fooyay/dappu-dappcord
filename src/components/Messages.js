@@ -9,8 +9,13 @@ import send from '../assets/send.svg'
 const socket = io('ws://localhost:3030')
 
 const Messages = ({ account, messages, currentChannel }) => {
+  const [message, setMessage] = useState('');
 
   const messagesEndRef = useRef(null);
+  const sendMessage = async (e) => {
+    e.preventDefault();
+    console.log("Sending message: ", message)
+  }
 
   return (
     <div className="text">
@@ -26,6 +31,26 @@ const Messages = ({ account, messages, currentChannel }) => {
         ))}
         <div ref={messagesEndRef} />
       </div>
+      <form onSubmit={sendMessage}>
+        {currentChannel && account ? (
+          <input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder={`Message #${currentChannel.name}`}
+          />
+        ) : (
+          <input
+            type="text"
+            disabled
+            placeholder="Connect your wallet and join a channel to send messages"
+          />
+        )}
+        <input type="text" onChange={(e) => setMessage(e.target.value)}></input>
+        <button type="submit">
+          <img src={send} alt="Send Message" />
+        </button>
+      </form>
     </div>
   );
 }
