@@ -57,7 +57,7 @@ function App() {
       socket.emit('get messages');
     });
 
-    socket.on('new message', () => {
+    socket.on('new message', (messages) => {
       setMessages(messages)
     });
 
